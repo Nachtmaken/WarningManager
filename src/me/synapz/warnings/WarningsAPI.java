@@ -34,16 +34,10 @@ public class WarningsAPI {
             reason = DEFAULT_REASON;
         }
 
-        // if it is 't' its red, if its 'f' its gold
-        String suffixToAdd = racist.equals("t") ? "&4I" : "&6I";
-
-        // add the old + new suffix together + check if the suffix is even there
-        String currentSuffix = getSuffix(p, getWarningsInt(p));
-
         // set the config
         setBans(p, 0);
         setWarnings(p, 1);
-        setSuffix(p, currentSuffix, suffixToAdd);
+        setSuffix(p, racist);
         setReason(p, reason);
         setSender(p, sender);
         setRacist(p, racist);
@@ -56,9 +50,9 @@ public class WarningsAPI {
         // do commands + check to ban player if its == to 3 or 6 etc.
         wm.getServer().dispatchCommand(wm.getServer().getConsoleSender(), "manuaddv " + p + " suffix ' " + getSuffix(p, getWarningsInt(p)) + "'");
 
+        // ban them every 3 warnings
         if(getWarningsInt(p) % 3 == 0)
         {
-            // add 1 to the bans int
             setBans(p, 1);
             resetWarnings(p);
             resetSuffix(p);
@@ -66,16 +60,13 @@ public class WarningsAPI {
             wm.getServer().dispatchCommand(wm.getServer().getConsoleSender(), "manudelv " + p + " suffix ' '");
         }
 
-
-        // add suffix
-
-
-
+        wm.saveConfig();
 
     }
 
     protected String getSuffix(String p, int warningNumber)
     {
+
         String currentSuffix = config.getString(p + ".Suffix");
 
         if(currentSuffix == null)
@@ -83,21 +74,42 @@ public class WarningsAPI {
             currentSuffix = "";
         }
 
-        System.out.print(currentSuffix);
-
         return currentSuffix;
 
     }
 
-    protected void setSuffix(String p, String beforeSuffix, String suffixToAdd)
+    protected void setSuffix(String p, String r)
     {
-        config.set(p + ".Suffix", beforeSuffix + suffixToAdd);
-        wm.saveConfig();
+       String suffix = suffixCreator(p, r);
+
+       config.set(p + ".Suffix", suffix);
+       wm.saveConfig();
+    }
+
+    // algorithm for creating suffix Ex: [&4I&6I]
+    private String suffixCreator(String p, String r)
+    {
+        String color = r.equals("t") ? "&4" : "&6";
+        int warnings = getWarningsInt(p);
+        String suffix = getSuffix(p, warnings);
+        switch (warnings){
+            case 1:
+                suffix = "&8[" + color + "I" + "&8]";
+                break;
+            case 2:
+                suffix = suffix.replaceAll("]", "") + color + "I" + "&8]";
+                break;
+            case 3:
+                suffix = suffix.replaceAll("]", "") + color + "I" + "&8]";
+                break;
+        }
+        return suffix;
     }
 
     protected void resetSuffix(String p)
     {
         config.set(p + ".Suffix", "");
+        wm.saveConfig();
     }
 
     protected void setRacist(String p, String tf)
@@ -172,7 +184,7 @@ public class WarningsAPI {
     {
 
         config.set(p, null);
-        wm.getServer().dispatchCommand(wm.getServer().getConsoleSender(), "/manudelv " + p + " suffix ' '");
+        wm.getServer().dispatchCommand(wm.getServer().getConsoleSender(), "manudelv " + p + " suffix");
         wm.saveConfig();
     }
 
@@ -201,11 +213,11 @@ public class WarningsAPI {
             sender.sendMessage(gold + "  Reason: " + red + getReason(p, i));
             sender.sendMessage(gold + "  Sender: " + red + getSender(p, i));
             sender.sendMessage(gold + "  Racist: " + red + getRacism(p, i));
-            sender.sendMessage(gold + "  Suffix: " + red + getSuffix(p, i));
         }
 
         sender.sendMessage(gold + "Total Warnings: " + red + getWarningsInt(p));
         sender.sendMessage(gold + "Total Bans: " + red + getBans(p));
+        sender.sendMessage(gold + "Suffix: " + red + getSuffix(p, getWarningsInt(p)));
 
     }
 
@@ -231,7 +243,7 @@ public class WarningsAPI {
             {
                 if(!sender.equals(p.getName()))
                 {
-                    p.sendMessage(ChatColor.GOLD + "Please be awhere that " + red + sender.getName() +
+                    p.sendMessage(ChatColor.GOLD + "Please be aware that " + red + sender.getName() +
                             gold + " has reset " + red + target + gold + "'s warnings.");
                 }
             }
