@@ -26,9 +26,8 @@ public class WarningManager extends JavaPlugin implements CommandExecutor{
     @Override
     public void onEnable()
     {
-        this.saveDefaultConfig();
         saveConfig();
-
+        this.saveDefaultConfig();
     }
 
     @Override
@@ -44,19 +43,37 @@ public class WarningManager extends JavaPlugin implements CommandExecutor{
         {
             if(args.length >= 2)
             {
-                String target = args[1];
                 if(args[0].equalsIgnoreCase("warn"))
                 {
+                    String target = "";
+                    String racism = "";
+                    try{
+                        target = args[2];
+                        racism = args[1];
+                    }catch (Exception e)
+                    {
+                        // failed
+                        api.wrongUsage(sender);
+                        return false;
+                    }
+
                     if(api.checkPermissions(sender, "warnings.warn"))
                     {
-                        String reason = api.produceReason(args);
+                        if(racism.equals("t") || racism.equals("f"))
+                        {
+                            String reason = api.produceReason(args);
 
-                        api.addWarning(sender, target, reason, api);
+                            api.addWarning(sender, target, racism, reason);
+                            return false;
+                        }
+
+                        sender.sendMessage(ChatColor.RED + "Usage: /warnings warn <t/f> <player> [reason]");
 
                     }
                 }
                 else if(args[0].equalsIgnoreCase("check"))
                 {
+                    String target = args[1];
                     if(api.checkPermissions(sender, "warnings.check"))
                     {
                         api.check(sender, target);
@@ -64,33 +81,29 @@ public class WarningManager extends JavaPlugin implements CommandExecutor{
                 }
                 else if(args[0].equalsIgnoreCase("reset"))
                 {
-                        if(api.checkPermissions(sender, "warnings.reset"))
-                        {
-
-                            api.reset(target);
-
-                            api.notifyOnReset(sender, target);
-
-                            sender.sendMessage(gold + "You have reset " + red + target + gold + "'s warnings.");
-                            api.tryToSendPlayerMessage(gold + "Your warnings were reset!", target);
-                        }
-                    }
-                }
-                else if(args.length == 0 || args.length == 1 || !args[0].equals("warn") || !args[0].equalsIgnoreCase("check") || !args[0].equalsIgnoreCase("reset"))
-                {
-                    if(api.checkPermissions(sender, "warnings.help"))
+                    String target = args[1];
+                    if(api.checkPermissions(sender, "warnings.reset"))
                     {
-                        api.wrongUsage(sender);
+
+                        api.reset(target);
+
+                        api.notifyOnReset(sender, target);
+
+                        sender.sendMessage(gold + "You have reset " + red + target + gold + "'s warnings.");
+                        api.tryToSendPlayerMessage(gold + "Your warnings were reset!", target);
                     }
                 }
             }
-        return false;
+            else if(args.length <= 1 || (args.length == 2 && args[0].equals("warn")) || !args[0].equals("warn") || !args[0].equalsIgnoreCase("check") || !args[0].equalsIgnoreCase("reset"))
+            {
+                if(api.checkPermissions(sender, "warnings.help"))
+                {
+                    api.wrongUsage(sender);
+                }
+            }
+        }
+    return false;
     }
-
-
-
-
-
 }
 
 
