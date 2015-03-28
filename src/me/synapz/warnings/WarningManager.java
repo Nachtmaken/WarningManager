@@ -20,8 +20,6 @@ public class WarningManager extends JavaPlugin implements CommandExecutor{
 
     ChatColor red = ChatColor.RED;
     ChatColor gold = ChatColor.GOLD;
-    ChatColor white = ChatColor.WHITE;
-    ChatColor gray = ChatColor.GRAY;
 
     @Override
     public void onEnable()
@@ -52,7 +50,7 @@ public class WarningManager extends JavaPlugin implements CommandExecutor{
                         racism = args[1];
                     }catch (Exception e)
                     {
-                        // failed
+                        // failed (not enough arguments provided)
                         api.wrongUsage(sender);
                         return false;
                     }

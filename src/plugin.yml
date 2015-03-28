@@ -8,3 +8,20 @@ database: false
 commands:
    warnings:
       description: Display the command menu.
+
+permissions:
+   warnings.*:
+     description: Gives access to all AdminEssentials commands
+     children:
+       warnings.warn
+       warnings.check
+       warnings.reset
+       warnings.help
+       warnings.notify
+
+
+
+
+
+
+

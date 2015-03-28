@@ -22,7 +22,7 @@ public class WarningsAPI {
     public WarningsAPI(WarningManager manager)
     {
        wm = manager;
-        config = manager.getConfig();
+       config = manager.getConfig();
     }
 
 
