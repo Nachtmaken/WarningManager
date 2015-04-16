@@ -13,11 +13,11 @@ permissions:
    warnings.*:
      description: Gives access to all AdminEssentials commands
      children:
-       warnings.warn
-       warnings.check
-       warnings.reset
-       warnings.help
-       warnings.notify
+       warnings.warn: true
+       warnings.check: true
+       warnings.reset: true
+       warnings.help: true
+       warnings.notify: true
 
 
 
