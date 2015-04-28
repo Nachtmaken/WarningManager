@@ -3,7 +3,6 @@ package me.synapz.warnings;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -14,184 +13,85 @@ public class WarningsAPI {
     ChatColor red = ChatColor.RED;
     ChatColor white = ChatColor.WHITE;
     ChatColor gray = ChatColor.GRAY;
-    WarningManager wm;
-    FileConfiguration config;
-    public static final String DEFAULT_REASON = "Follow all rules.";
-
-
-    public WarningsAPI(WarningManager manager)
-    {
-       wm = manager;
-       config = manager.getConfig();
-    }
-
-
-    protected void addWarning(CommandSender sender, String p, String racist, String reason)
+    FileConfiguration file = SettingsManager.getManager().getWarningFile();
+    
+    protected void addWarning(CommandSender sender, String p, String reason)
     {
 
         if(reason.equals(""))
         {
-            reason = DEFAULT_REASON;
+            reason = SettingsManager.DEFAULT_REASON;
         }
 
-        // set the config
-        setBans(p, 0);
+        // Set the file values
         setWarnings(p, 1);
-        setSuffix(p, racist);
         setReason(p, reason);
         setSender(p, sender);
-        setRacist(p, racist);
 
-
+        String broadcastMessage = SettingsManager.BROADCAST_MESSAGE.replace("%SENDER%", sender.getName());
+        broadcastMessage = broadcastMessage.replace("%PLAYER%", p);
+        broadcastMessage = broadcastMessage.replace("%REASON%", reason);
+        
+        String playerMessage = SettingsManager.PLAYER_MESSAGE;
+        playerMessage = playerMessage.replace("%SENDER%", sender.getName());
+        playerMessage = playerMessage.replace("%REASON%", reason);
+        
         // print outputs
-        Bukkit.broadcastMessage(red + p + gold + " was warned by " + red + sender.getName() + gold + " for " + reason);
-        tryToSendPlayerMessage(gold + "You were warned. You have " + red + getWarningsInt(p) + gold + " warnings", p);
-
-        // do commands + check to ban player if its == to 3 or 6 etc.
-        wm.getServer().dispatchCommand(wm.getServer().getConsoleSender(), "manuaddv " + p + " suffix ' " + getSuffix(p, getWarningsInt(p)) + "'");
-
-        // ban them every 3 warnings
-        if(getWarningsInt(p) % 3 == 0)
-        {
-            setBans(p, 1);
-            resetWarnings(p);
-            resetSuffix(p);
-            wm.getServer().dispatchCommand(wm.getServer().getConsoleSender(), "itemp " + p + " 3d You have received to many warnings!");
-            wm.getServer().dispatchCommand(wm.getServer().getConsoleSender(), "manudelv " + p + " suffix ' '");
-        }
-
-        wm.saveConfig();
-
-    }
-
-    protected String getSuffix(String p, int warningNumber)
-    {
-
-        String currentSuffix = config.getString(p + ".Suffix");
-
-        if(currentSuffix == null)
-        {
-            currentSuffix = "";
-        }
-
-        return currentSuffix;
-
-    }
-
-    protected void setSuffix(String p, String r)
-    {
-       String suffix = suffixCreator(p, r);
-
-       config.set(p + ".Suffix", suffix);
-       wm.saveConfig();
-    }
-
-    // algorithm for creating suffix Ex: [&4I&6I]
-    private String suffixCreator(String p, String r)
-    {
-        String color = r.equals("t") ? "&4" : "&6";
-        int warnings = getWarningsInt(p);
-        String suffix = getSuffix(p, warnings);
-        switch (warnings){
-            case 1:
-                suffix = "&8[" + color + "I" + "&8]";
-                break;
-            case 2:
-                suffix = suffix.replaceAll("]", "") + color + "I" + "&8]";
-                break;
-            case 3:
-                suffix = suffix.replaceAll("]", "") + color + "I" + "&8]";
-                break;
-        }
-        return suffix;
-    }
-
-    protected void resetSuffix(String p)
-    {
-        config.set(p + ".Suffix", "");
-        wm.saveConfig();
-    }
-
-    protected void setRacist(String p, String tf)
-    {
-        String racism = tf.equals("t") ? "true" : "false";
-
-        config.set(p + ".Warning" + getWarningsInt(p) + ".Racist", racism);
-    }
-
-    protected String getRacism(String p, int warningNumber)
-    {
-        return config.getString(p + ".Warning" + warningNumber + ".Racist");
+        Messenger.getMessenger().broadcastMessage(broadcastMessage);
+        tryToSendPlayerMessage(playerMessage, p);
     }
 
     protected void setWarnings(String p, int amount)
     {
-
         int newTotalWarnings = getWarningsInt(p) + amount;
-        config.set(p + ".Total-Warnings", newTotalWarnings);
-        wm.saveConfig();
+        file.set(p + ".Total-Warnings", newTotalWarnings);
+        SettingsManager.getManager().saveFiles();
     }
 
     protected int getWarningsInt(String p)
     {
-        return config.getInt(p + ".Total-Warnings");
+        return file.getInt(p + ".Total-Warnings");
     }
 
     protected void resetWarnings(String p)
     {
-        config.set(p + ".Total-Warnings", 0);
-    }
-
-    protected int getBans(String p)
-    {
-        return config.getInt(p + ".Total-Bans");
-    }
-
-
-    protected void setBans(String p, int amount)
-    {
-        int bans = config.getInt(p + ".Total-Bans");
-        config.set(p + ".Total-Bans", bans + amount);
-        wm.saveConfig();
+        file.set(p + ".Total-Warnings", 0);
     }
 
     protected void setReason(String p, String reason)
     {
-        config.set(p + ".Warning" + getWarningsInt(p) + ".Reason", reason);
-        wm.saveConfig();
+        file.set(p + ".Warning" + getWarningsInt(p) + ".Reason", reason);
+        SettingsManager.getManager().saveFiles();
     }
 
     protected String getReason(String p, int reasonNumber)
     {
-        return config.getString(p + ".Warning" + reasonNumber + ".Reason");
+        return file.getString(p + ".Warning" + reasonNumber + ".Reason");
     }
 
     protected void setSender(String p, CommandSender sender)
     {
 
 
-        config.set(p + ".Warning" + getWarningsInt(p) + ".Sender", sender.getName());
-        wm.saveConfig();
+        file.set(p + ".Warning" + getWarningsInt(p) + ".Sender", sender.getName());
+        SettingsManager.getManager().saveFiles();
     }
 
     protected String getSender(String p, int reasonNumber)
     {
-
-        return config.getString(p + ".Warning" + reasonNumber + ".Sender");
+        return file.getString(p + ".Warning" + reasonNumber + ".Sender");
     }
 
     protected void reset(String p)
     {
-
-        config.set(p, null);
-        wm.getServer().dispatchCommand(wm.getServer().getConsoleSender(), "manudelv " + p + " suffix");
-        wm.saveConfig();
+        file.set(p, null);
+        SettingsManager.getManager().saveFiles();
     }
 
     protected String produceReason(String[] args)
     {
         String reason = "";
-        for(int i = 3; i < args.length; i++){
+        for(int i = 2; i < args.length; i++){
 
             // this also removes the " " on the last argument so it isn't "{WARNING} "
             reason = i+1 == args.length ? reason + args[i] : reason + args[i] + " ";
@@ -212,13 +112,9 @@ public class WarningsAPI {
             sender.sendMessage(gold + "Warning #" + i + ": ");
             sender.sendMessage(gold + "  Reason: " + red + getReason(p, i));
             sender.sendMessage(gold + "  Sender: " + red + getSender(p, i));
-            sender.sendMessage(gold + "  Racist: " + red + getRacism(p, i));
         }
 
         sender.sendMessage(gold + "Total Warnings: " + red + getWarningsInt(p));
-        sender.sendMessage(gold + "Total Bans: " + red + getBans(p));
-        sender.sendMessage(gold + "Suffix: " + red + getSuffix(p, getWarningsInt(p)));
-
     }
 
 
@@ -254,7 +150,7 @@ public class WarningsAPI {
     {
         try{
             Player player = Bukkit.getServer().getPlayer(p);
-            player.sendMessage(message);
+            Messenger.getMessenger().message(player, message);
         }catch (NullPointerException e)
         {
             // player is offline, do nothing
@@ -269,10 +165,8 @@ public class WarningsAPI {
         player.sendMessage(gold + "/warnings" + white +       " • " + gray + "Display the command menu.");
         player.sendMessage(gold + "/warnings check <player>" + white + " • " + gray + "Check a players past warnings.");
         player.sendMessage(gold + "/warnings reset <player>" + white + " • " + gray + "Reset a player's warnings");
-        player.sendMessage(gold + "/warnings warn <t/f> <player> [reason]" + white + " • " + gray + "Warn a player.");
-        player.sendMessage(gold + "* - Warning for racism? 't' means true 'f' means false.");
-        player.sendMessage(gold + "Author: " + gray + "Synapz_");
-
+        player.sendMessage(gold + "/warnings warn <player> [reason]" + white + " • " + gray + "Warn a player.");
+        player.sendMessage(gold + "/warnings reload" + white + " • " + gray + "Reload config.yml");
     }
 
 }

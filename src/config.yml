@@ -1,0 +1,21 @@
+# Tips for editing YAML files:
+#   - Do not use TABS! Instead use 4 spaces.
+#   - Lines starting with '#' symbol are completely ignored
+#   - Indentation matters
+#   - If you have any errors, google 'yaml parser' to easily correct them
+
+# Set the prefix of the plugin. Ex. [WarningManager] Synapz_ has been warned for Griefing! 
+prefix: '&8[&6WarningManager&8] '
+
+# Message that gets sent out when a player gets warned. Tags: %PLAYER% %REASON% %SENDER%
+broadcast-message: '&6%PLAYER% has been warned by &c%SENDER% for &c%REASON%'
+
+# If set to true the broadcast-message will get sent to everyone on the server.
+# If set to false the broadcast-message will only get sent to players with warnings.notify permission
+broadcast-reason: true
+
+# Reason that will be supplied when the reason argument is not full filled
+default-reason: 'Follow all rules!'
+
+# Message that gets sent to the player when they get warned. Tags: %SENDER% %REASON%
+player-message: '&6You were warned by &c%SENDER% &6for &c%REASON%'

@@ -18,6 +18,7 @@ permissions:
        warnings.reset: true
        warnings.help: true
        warnings.notify: true
+       warnings.reload: true
 
 
 
