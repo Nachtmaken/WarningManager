@@ -28,10 +28,12 @@ public class WarningsAPI {
         setReason(p, reason);
         setSender(p, sender);
 
+        // get the messages ready to be broadcasted by replacing tags with their values
         String broadcastMessage = SettingsManager.BROADCAST_MESSAGE.replace("%SENDER%", sender.getName());
         broadcastMessage = broadcastMessage.replace("%PLAYER%", p);
         broadcastMessage = broadcastMessage.replace("%REASON%", reason);
-        
+
+        // todo: fix bug here, reason isnt displayed
         String playerMessage = SettingsManager.PLAYER_MESSAGE;
         playerMessage = playerMessage.replace("%SENDER%", sender.getName());
         playerMessage = playerMessage.replace("%REASON%", reason);
