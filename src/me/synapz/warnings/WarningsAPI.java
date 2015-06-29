@@ -33,14 +33,20 @@ public class WarningsAPI {
         broadcastMessage = broadcastMessage.replace("%PLAYER%", p);
         broadcastMessage = broadcastMessage.replace("%REASON%", reason);
 
-        // todo: fix bug here, reason isnt displayed
-        String playerMessage = SettingsManager.PLAYER_MESSAGE;
-        playerMessage = playerMessage.replace("%SENDER%", sender.getName());
-        playerMessage = playerMessage.replace("%REASON%", reason);
-        
-        // print outputs
+        // print output
         Messenger.getMessenger().broadcastMessage(broadcastMessage);
-        tryToSendPlayerMessage(playerMessage, p);
+
+        String playerMessage = SettingsManager.PLAYER_MESSAGE;
+        // quick check to make sure the PLAYER_MESSAGE is not 'none' because if it is we don't want to a send msg to player
+        if (!isNone(playerMessage)) {
+            playerMessage = playerMessage.replace("%SENDER%", sender.getName());
+            playerMessage = playerMessage.replace("%REASON%", reason);
+            playerMessage = playerMessage.replace("%WARNINGS%", getWarningsInt(p) + "");
+
+            tryToSendPlayerMessage(playerMessage, p);
+        }
+
+
     }
 
     protected void setWarnings(String p, int amount)
@@ -169,6 +175,13 @@ public class WarningsAPI {
         player.sendMessage(gold + "/warnings reset <player>" + white + " • " + gray + "Reset a player's warnings");
         player.sendMessage(gold + "/warnings warn <player> [reason]" + white + " • " + gray + "Warn a player.");
         player.sendMessage(gold + "/warnings reload" + white + " • " + gray + "Reload config.yml");
+    }
+
+    private boolean isNone(String toBeChecked) {
+        if (toBeChecked.equals("none")) {
+            return true;
+        }
+        return false;
     }
 
 }

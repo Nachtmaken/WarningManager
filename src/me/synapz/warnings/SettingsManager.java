@@ -12,9 +12,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class SettingsManager {
 
 	private static SettingsManager instance = new SettingsManager();
-	private FileConfiguration config, warnings;
+	private FileConfiguration warnings;
     private File wFile;
-	private WarningManager wm;
 	
 	public static String PREFIX, DEFAULT_REASON, BROADCAST_MESSAGE, PLAYER_MESSAGE;
 	public static boolean broadcast;
@@ -43,23 +42,15 @@ public class SettingsManager {
                 e.printStackTrace();
             }
         }
-		
-		this.wm = wm;
-		wm.saveDefaultConfig();
-		
+
+        wm.saveResource("config.yml", false);
         warnings = YamlConfiguration.loadConfiguration(wFile);
-		config = wm.getConfig();
-		
+
 		// Load all values from the config into memory to be utilized by the plugin
-		loadValues(config);
-	}
-	
-	public void reloadConfig() {
-		wm.reloadConfig();
+		loadValues(wm.getConfig());
 	}
 	
 	public void saveFiles() {
-		wm.saveConfig();
         try {
             warnings.save(wFile);
         }catch (Exception e) {
@@ -72,7 +63,7 @@ public class SettingsManager {
 		return warnings;
 	}
 	
-	private void loadValues(FileConfiguration file) {
+	public void loadValues(FileConfiguration file) {
 		broadcast         = file.getBoolean("broadcast-reason");
 		BROADCAST_MESSAGE = transColors(file.getString("broadcast-message"));
 		PREFIX            = transColors(file.getString("prefix"));

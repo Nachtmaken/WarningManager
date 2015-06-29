@@ -7,26 +7,28 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 public class WarningManager extends JavaPlugin implements CommandExecutor{
 
     ChatColor red = ChatColor.RED;
     ChatColor gold = ChatColor.GOLD;
-
-    /**
-     * Reloading after changes doesn't take effect.
-     * Add theme color
-     */
     
     @Override
     public void onEnable()
     {
         SettingsManager.getManager().init(this);
+
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch (IOException localIOException) {}
+
     }
 
     @Override
     public void onDisable()
     {
-        this.saveConfig();
     }
 
     @Override
@@ -38,18 +40,15 @@ public class WarningManager extends JavaPlugin implements CommandExecutor{
             {
                 if(args[0].equalsIgnoreCase("warn"))
                 {
-                    String target = "";
-                    target = args[1];
+                    String target = args[1];
                     
                     if(api.checkPermissions(sender, "warnings.warn"))
                     {
-                    	String reason = api.produceReason(args);
+                        String reason = api.produceReason(args);
 
                         api.addWarning(sender, target, reason);
                         return false;
                     }
-
-                    Messenger.getMessenger().message(sender, ChatColor.RED + "Usage: /warnings warn <player> [reason]");
                 }
                 else if(args[0].equalsIgnoreCase("check"))
                 {
@@ -76,7 +75,8 @@ public class WarningManager extends JavaPlugin implements CommandExecutor{
             {
             	if (api.checkPermissions(sender, "warnings.reload"))
             	{
-                	SettingsManager.getManager().reloadConfig();
+                    this.reloadConfig();
+                	SettingsManager.getManager().loadValues(this.getConfig());
                 	Messenger.getMessenger().message(sender, ChatColor.GOLD + "All settings were reloaded!");
             	}
             }

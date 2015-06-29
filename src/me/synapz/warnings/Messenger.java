@@ -2,12 +2,10 @@ package me.synapz.warnings;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Messenger {
-	
-	
-	private static final String PREFIX = " ";
-	
+
 	private Messenger() {}
 	
 	private static Messenger instance = new Messenger();
@@ -18,7 +16,7 @@ public class Messenger {
 	
 	public void message(CommandSender sender, String... message) {
 		for (String msg : message) {
-			sender.sendMessage(PREFIX + msg);
+			sender.sendMessage(SettingsManager.PREFIX + msg);
 		}
 	}
 	
@@ -26,8 +24,12 @@ public class Messenger {
 		String prefix = SettingsManager.PREFIX;
 		if (SettingsManager.broadcast) {
 			Bukkit.broadcastMessage(prefix + message);
-		} else {				
-			Bukkit.broadcast(prefix + message, "warnings.notify");
+		} else {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.hasPermission("warnings.notify")) {
+                    Bukkit.broadcastMessage(prefix + message);
+                }
+            }
 		}
 	}
 	

@@ -1,6 +1,6 @@
 name: WarningManager
 version: 1.0
-description: Be in control of your players. Set warnings and punishments.
+description: Be in control of your players! Set warnings to easily view players' past behavior.
 author: Synapz_
 main: me.synapz.warnings.WarningManager
 database: false
@@ -19,10 +19,3 @@ permissions:
        warnings.help: true
        warnings.notify: true
        warnings.reload: true
-
-
-
-
-
-
-
