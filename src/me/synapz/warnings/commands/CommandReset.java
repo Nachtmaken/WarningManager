@@ -17,12 +17,14 @@ public class CommandReset extends BaseCommand {
         api.reset(args[0]);
         api.notifyOnReset(sender, args[0]);
 
-        sender.sendMessage(GOLD + "You have reset " + RED + args[0] + GOLD + "'s warnings.");
+        if (!args[0].equalsIgnoreCase(sender.getName())) {
+            sender.sendMessage(GOLD + "You have reset " + RED + args[0] + GOLD + "'s warnings.");
+        }
         Utils.tryToSendPlayerMessage(GOLD + "Your warnings were reset!", args[0]);
     }
 
     public String getName() {
-        return "reload";
+        return "reset";
     }
 
     public ArrayList<String> getPermissions() {

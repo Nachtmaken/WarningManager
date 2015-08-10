@@ -9,7 +9,7 @@
 prefix: '&8[&6WarningManager&8] '
 
 # Message that gets sent out when a player gets warned. Tags: %TARGET% %REASON% %SENDER%
-broadcast-message: '&6%PLAYER% has been warned by &c%SENDER% &6for &c%REASON%'
+broadcast-message: '&6Player &c%SENDER% &6has warned &c%PLAYER% &6for &c%REASON%'
 
 # If set to true the broadcast-message will get sent to everyone on the server.
 # If set to false the broadcast-message will only get sent to players with warnings.notify permission
@@ -19,4 +19,4 @@ broadcast-reason: true
 default-reason: 'Follow all the rules!'
 
 # Message that gets sent to the player when they get warned. Type 'none' to ignore. Tags: %SENDER% %REASON% %WARNINGS%
-player-message: '&6You have been warned by &c%SENDER% &6for &c%REASON% &6and now have &7%WARNINGS% &6warnings.'
+player-message: '&6You now have &7%WARNINGS% &6warnings.'
