@@ -1,24 +1,29 @@
 package me.synapz.warnings;
 
 
-import org.bukkit.ChatColor;
+import me.synapz.warnings.base.BaseCommand;
+import me.synapz.warnings.commands.*;
+import me.synapz.warnings.utils.Messenger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class WarningManager extends JavaPlugin implements CommandExecutor{
+import static org.bukkit.ChatColor.DARK_RED;
+import static org.bukkit.ChatColor.RED;
 
-    ChatColor red = ChatColor.RED;
-    ChatColor gold = ChatColor.GOLD;
-    
+public class WarningManager extends JavaPlugin implements CommandExecutor {
+
+    private static ArrayList<BaseCommand> commands = new ArrayList<>();
+
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         SettingsManager.getManager().init(this);
-
+        init();
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();
@@ -27,68 +32,80 @@ public class WarningManager extends JavaPlugin implements CommandExecutor{
     }
 
     @Override
-    public void onDisable()
-    {
-    }
-
-    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        WarningsAPI api = new WarningsAPI();
-        if(command.getName().equalsIgnoreCase("warnings"))
-        {
-            if(args.length >= 2)
-            {
-                if(args[0].equalsIgnoreCase("warn"))
-                {
-                    String target = args[1];
-                    
-                    if(api.checkPermissions(sender, "warnings.warn"))
-                    {
-                        String reason = api.produceReason(args);
+        boolean isHandledCommand = false;
+        BaseCommand cmd = null;
 
-                        api.addWarning(sender, target, reason);
-                        return false;
-                    }
-                }
-                else if(args[0].equalsIgnoreCase("check"))
-                {
-                    String target = args[1];
-                    if(api.checkPermissions(sender, "warnings.check"))
-                    {
-                        api.check(sender, target);
-                    }
-                }
-                else if(args[0].equalsIgnoreCase("reset"))
-                {
-                    String target = args[1];
-                    if(api.checkPermissions(sender, "warnings.reset"))
-                    {
-                        api.reset(target);
-                        api.notifyOnReset(sender, target);
-
-                        sender.sendMessage(gold + "You have reset " + red + target + gold + "'s warnings.");
-                        api.tryToSendPlayerMessage(gold + "Your warnings were reset!", target);
-                    }
-                }
-            }
-            else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) 
-            {
-            	if (api.checkPermissions(sender, "warnings.reload"))
-            	{
-                    this.reloadConfig();
-                	SettingsManager.getManager().loadValues(this.getConfig());
-                	Messenger.getMessenger().message(sender, ChatColor.GOLD + "All settings were reloaded!");
-            	}
-            }
-            else
-            {
-                if(api.checkPermissions(sender, "warnings.help"))
-                {
-                    api.wrongUsage(sender);
-                }
+        for (BaseCommand baseCommand : commands) {
+            if (command.getName().equalsIgnoreCase(baseCommand.getName())) {
+                isHandledCommand = true;
+                cmd = baseCommand;
             }
         }
-    return false;
+
+        if (isHandledCommand) {
+            try {
+                if (isCorrectArgs(sender, cmd, args.length)) {
+                    if (!(sender instanceof Player) || hasPerm(sender, args.length, cmd)) {
+                        cmd.onCommand(sender, args);
+                    } else {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            } catch (Exception e) {
+                Messenger.getMessenger().message(sender, RED + "An unexpected error occurred. Check console log for more information.");
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean hasPerm(CommandSender sender, int argument, BaseCommand command) {
+        String permission = "";
+        for (String perm : command.getPermissions()) {
+            String[] permList = perm.split(" ");
+            if (Integer.parseInt(permList[1]) == argument) {
+                permission = permList[0];
+            }
+        }
+        if (sender.hasPermission(permission)) {
+            return true;
+        } else {
+            sender.sendMessage(DARK_RED + "You don't have access to that command!");
+            return false;
+        }
+    }
+
+    private boolean isCorrectArgs(CommandSender sender, BaseCommand command, int argCount) {
+        boolean correctArgCount = false;
+
+        if (command.handledArgs().contains(argCount)) {
+            correctArgCount = true;
+        }
+
+        if (!correctArgCount) {
+            sender.sendMessage(RED + "Please review your argument count.");
+            sender.sendMessage(RED + command.getCorrectUsage());
+        }
+        return correctArgCount;
+    }
+
+    private void addCommand(BaseCommand...cmd) {
+        for (BaseCommand command : cmd) {
+            commands.add(command);
+        }
+    }
+
+    private void init() {
+        addCommand(new CommandWarn(), new CommandCheck(), new CommandReset(), new CommandReload(this), new CommandHelp(this));
+    }
+
+    public ArrayList<BaseCommand> getCommands() {
+        return commands;
     }
 }
 

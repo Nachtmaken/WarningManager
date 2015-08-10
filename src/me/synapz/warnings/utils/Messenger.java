@@ -1,5 +1,6 @@
-package me.synapz.warnings;
+package me.synapz.warnings.utils;
 
+import me.synapz.warnings.SettingsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
