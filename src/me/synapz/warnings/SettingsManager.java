@@ -2,6 +2,7 @@ package me.synapz.warnings;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import me.synapz.warnings.utils.Messenger;
 import net.md_5.bungee.api.ChatColor;
@@ -15,7 +16,9 @@ public class SettingsManager {
 	private static SettingsManager instance = new SettingsManager();
 	private FileConfiguration warnings;
     private File wFile;
-	
+    private WarningManager wm = null;
+	private static ArrayList<Integer> punishments = new ArrayList<>();
+
 	public static String PREFIX, DEFAULT_REASON, BROADCAST_MESSAGE, PLAYER_MESSAGE;
 	public static boolean broadcast;
 		
@@ -49,6 +52,8 @@ public class SettingsManager {
 
 		// Load all values from the config into memory to be utilized by the plugin
 		loadValues(wm.getConfig());
+        loadPunishments(wm.getConfig());
+        this.wm = wm;
 	}
 	
 	public void saveFiles() {
@@ -63,6 +68,14 @@ public class SettingsManager {
 	public FileConfiguration getWarningFile() {
 		return warnings;
 	}
+
+    public ArrayList<Integer> getPunishments() {
+        return punishments;
+    }
+
+    public String getPunishmentCommand(int punishmentNumber) {
+        return wm.getConfig().getString("punishments."+punishmentNumber+".command");
+    }
 	
 	public void loadValues(FileConfiguration file) {
 		broadcast         = file.getBoolean("broadcast-reason");
@@ -75,4 +88,12 @@ public class SettingsManager {
 	private String transColors(String string) {
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
+
+    private void loadPunishments(FileConfiguration file) {
+        for (int i = 1; i <= 100; i++) {
+            if (file.getString("punishments."+i+".command") != null) {
+                punishments.add(i);
+            }
+        }
+    }
 }

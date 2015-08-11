@@ -20,3 +20,11 @@ default-reason: 'Follow all the rules!'
 
 # Message that gets sent to the player when they get warned. Type 'none' to ignore. Tags: %SENDER% %REASON% %WARNINGS%
 player-message: '&6You now have &7%WARNINGS% &6warnings.'
+
+# Auto command handler. Number is amount of warnings until the 'command' happens.
+# In this case, when the player is warned 5 times he will be auto kicked.
+# Avaible tags are %PLAYER% and %SENDER%.
+# Do not include the '/' at the begining of the command
+punishments:
+  5:
+    command: "kick %PLAYER% Stop breaking rules please. - %SENDER%"

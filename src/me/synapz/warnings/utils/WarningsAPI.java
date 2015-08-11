@@ -44,6 +44,12 @@ public class WarningsAPI {
             Utils.tryToSendPlayerMessage(playerMessage, p);
         }
 
+        if (SettingsManager.getManager().getPunishments().contains(getWarningsInt(p))) {
+            String punishment = SettingsManager.getManager().getPunishmentCommand(getWarningsInt(p));
+            punishment = punishment.replace("%PLAYER%", p);
+            punishment = punishment.replace("%SENDER%", sender.getName());
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), punishment);
+        }
 
     }
 
