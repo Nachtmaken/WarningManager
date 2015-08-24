@@ -1,8 +1,8 @@
-package me.synapz.warnings.commands;
+package io.github.synapz1.warningmanager.commands;
 
-import me.synapz.warnings.utils.Utils;
-import me.synapz.warnings.WarningManager;
-import me.synapz.warnings.base.BaseCommand;
+import io.github.synapz1.warningmanager.WarningManager;
+import io.github.synapz1.warningmanager.base.BaseCommand;
+import io.github.synapz1.warningmanager.utils.Utils;
 import org.bukkit.command.CommandSender;
 import static org.bukkit.ChatColor.*;
 
@@ -28,7 +28,7 @@ public class CommandHelp extends BaseCommand {
     }
 
     public ArrayList<String> getPermissions() {
-        ArrayList<String> permissions = new ArrayList<>();
+        ArrayList<String> permissions = new ArrayList<String>();
         permissions.add("warnings.help 0");
         return permissions;
     }

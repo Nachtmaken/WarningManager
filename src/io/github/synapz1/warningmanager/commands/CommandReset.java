@@ -1,11 +1,11 @@
-package me.synapz.warnings.commands;
+package io.github.synapz1.warningmanager.commands;
 
 
-import me.synapz.warnings.utils.Utils;
-import me.synapz.warnings.utils.WarningsAPI;
-import me.synapz.warnings.base.BaseCommand;
 import static org.bukkit.ChatColor.*;
 
+import io.github.synapz1.warningmanager.base.BaseCommand;
+import io.github.synapz1.warningmanager.utils.Utils;
+import io.github.synapz1.warningmanager.utils.WarningsAPI;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class CommandReset extends BaseCommand {
     }
 
     public ArrayList<String> getPermissions() {
-        ArrayList<String> permissions = new ArrayList<>();
+        ArrayList<String> permissions = new ArrayList<String>();
         permissions.add("warnings.reset 1");
         return permissions;
     }

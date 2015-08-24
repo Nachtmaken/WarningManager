@@ -1,6 +1,6 @@
-package me.synapz.warnings.utils;
+package io.github.synapz1.warningmanager.utils;
 
-import me.synapz.warnings.SettingsManager;
+import io.github.synapz1.warningmanager.SettingsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

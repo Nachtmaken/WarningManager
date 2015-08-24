@@ -1,4 +1,4 @@
-package me.synapz.warnings.base;
+package io.github.synapz1.warningmanager.base;
 
 import static org.bukkit.ChatColor.*;
 

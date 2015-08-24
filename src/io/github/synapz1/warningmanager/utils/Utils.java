@@ -1,4 +1,4 @@
-package me.synapz.warnings.utils;
+package io.github.synapz1.warningmanager.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Utils {
 
     public static ArrayList<String> allPermArguments(String permission) {
-        ArrayList<String> permissions = new ArrayList<>();
+        ArrayList<String> permissions = new ArrayList<String>();
         for (int i = 1; i < 200; i++) {
             permissions.add(permission + " " + i);
         }
@@ -16,7 +16,7 @@ public class Utils {
     }
 
     public static ArrayList<Integer> allArguments() {
-        ArrayList<Integer> args = new ArrayList<>();
+        ArrayList<Integer> args = new ArrayList<Integer>();
         for (int i = 1; i < 200; i++) {
             args.add(i);
         }
@@ -24,7 +24,7 @@ public class Utils {
     }
 
     public static ArrayList<Integer> makeArgs(int...args) {
-        ArrayList<Integer> arguments = new ArrayList<>();
+        ArrayList<Integer> arguments = new ArrayList<Integer>();
         for (Integer arg : args) {
             arguments.add(arg);
         }

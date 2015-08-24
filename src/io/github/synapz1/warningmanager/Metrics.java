@@ -1,4 +1,4 @@
-package me.synapz.warnings;
+package io.github.synapz1.warningmanager;
 
 
 import java.io.BufferedReader;

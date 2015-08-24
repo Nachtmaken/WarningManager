@@ -1,12 +1,12 @@
-package me.synapz.warnings;
+package io.github.synapz1.warningmanager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import me.synapz.warnings.utils.Messenger;
-import net.md_5.bungee.api.ChatColor;
+import static org.bukkit.ChatColor.*;
 
+import io.github.synapz1.warningmanager.utils.Messenger;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,7 +17,7 @@ public class SettingsManager {
 	private FileConfiguration warnings;
     private File wFile;
     private WarningManager wm = null;
-	private static ArrayList<Integer> punishments = new ArrayList<>();
+	private static ArrayList<Integer> punishments = new ArrayList<Integer>();
 
 	public static String PREFIX, DEFAULT_REASON, BROADCAST_MESSAGE, PLAYER_MESSAGE;
 	public static boolean broadcast;
@@ -60,7 +60,7 @@ public class SettingsManager {
         try {
             warnings.save(wFile);
         }catch (Exception e) {
-            Messenger.getMessenger().message(Bukkit.getConsoleSender(), ChatColor.RED + "Could not save warnings.yml!");
+            Messenger.getMessenger().message(Bukkit.getConsoleSender(), RED + "Could not save warnings.yml!");
             e.printStackTrace();
         }
 	}
@@ -86,7 +86,7 @@ public class SettingsManager {
 	}
 	
 	private String transColors(String string) {
-		return ChatColor.translateAlternateColorCodes('&', string);
+		return translateAlternateColorCodes('&', string);
 	}
 
     private void loadPunishments(FileConfiguration file) {

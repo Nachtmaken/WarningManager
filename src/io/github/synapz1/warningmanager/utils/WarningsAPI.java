@@ -1,7 +1,9 @@
-package me.synapz.warnings.utils;
+package io.github.synapz1.warningmanager.utils;
 
 
-import me.synapz.warnings.SettingsManager;
+import io.github.synapz1.warningmanager.SettingsManager;
+import io.github.synapz1.warningmanager.utils.Messenger;
+import io.github.synapz1.warningmanager.utils.Utils;
 import org.bukkit.Bukkit;
 import static org.bukkit.ChatColor.*;
 import org.bukkit.command.CommandSender;
@@ -99,14 +101,28 @@ public class WarningsAPI {
 
         sender.sendMessage(RED + "**********" + GOLD + p + RED + "**********");
 
-        for(int i = 1; i <= warningsAmount; i++)
+        for(int i = 1; i <= warningsAmount+40; i++)
         {
-            sender.sendMessage(GOLD + "Warning #" + i + ": ");
-            sender.sendMessage(GOLD + "  Reason: " + RED + getReason(p, i));
-            sender.sendMessage(GOLD + "  Sender: " + RED + getSender(p, i));
+            if (getSender(p, i) != null && getReason(p, i) != null) {
+                sender.sendMessage(GOLD + "Warning #" + i + ": ");
+                sender.sendMessage(GOLD + "  Reason: " + RED + getReason(p, i));
+                sender.sendMessage(GOLD + "  Sender: " + RED + getSender(p, i));
+            }
         }
 
         sender.sendMessage(GOLD + "Total Warnings: " + RED + getWarningsInt(p));
+    }
+
+    public void remove(CommandSender sender, String player, int warning) {
+        if (getSender(player, warning) != null) {
+            file.set(player + ".Warning" + warning, null);
+            sender.sendMessage(GOLD + "You removed warning " + RED + warning + GOLD + " from " + RED + player);
+            setWarnings(player, -1);
+            SettingsManager.getManager().saveFiles();
+        } else {
+            sender.sendMessage(GOLD + "Player " + RED + player + GOLD + " does not have warning " + RED + warning);
+        }
+
     }
 
     public void notifyOnReset(CommandSender sender, String target)

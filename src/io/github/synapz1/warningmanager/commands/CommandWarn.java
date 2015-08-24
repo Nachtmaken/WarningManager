@@ -1,9 +1,9 @@
-package me.synapz.warnings.commands;
+package io.github.synapz1.warningmanager.commands;
 
-import me.synapz.warnings.base.BaseCommand;
-import me.synapz.warnings.SettingsManager;
-import me.synapz.warnings.utils.Utils;
-import me.synapz.warnings.utils.WarningsAPI;
+import io.github.synapz1.warningmanager.SettingsManager;
+import io.github.synapz1.warningmanager.base.BaseCommand;
+import io.github.synapz1.warningmanager.utils.Utils;
+import io.github.synapz1.warningmanager.utils.WarningsAPI;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;

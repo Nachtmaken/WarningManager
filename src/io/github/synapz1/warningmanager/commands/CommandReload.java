@@ -1,9 +1,10 @@
-package me.synapz.warnings.commands;
+package io.github.synapz1.warningmanager.commands;
 
-import me.synapz.warnings.*;
-import me.synapz.warnings.base.BaseCommand;
-import me.synapz.warnings.utils.Messenger;
-import me.synapz.warnings.utils.Utils;
+import io.github.synapz1.warningmanager.SettingsManager;
+import io.github.synapz1.warningmanager.WarningManager;
+import io.github.synapz1.warningmanager.base.BaseCommand;
+import io.github.synapz1.warningmanager.utils.Messenger;
+import io.github.synapz1.warningmanager.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -28,7 +29,7 @@ public class CommandReload extends BaseCommand {
     }
 
     public ArrayList<String> getPermissions() {
-        ArrayList<String> permissions = new ArrayList<>();
+        ArrayList<String> permissions = new ArrayList<String>();
         permissions.add("warnings.reload 0");
         return permissions;
     }

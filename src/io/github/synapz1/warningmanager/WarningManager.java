@@ -1,9 +1,9 @@
-package me.synapz.warnings;
+package io.github.synapz1.warningmanager;
 
-
-import me.synapz.warnings.base.BaseCommand;
-import me.synapz.warnings.commands.*;
-import me.synapz.warnings.utils.Messenger;
+;
+import io.github.synapz1.warningmanager.base.BaseCommand;
+import io.github.synapz1.warningmanager.commands.*;
+import io.github.synapz1.warningmanager.utils.Messenger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +18,7 @@ import static org.bukkit.ChatColor.RED;
 
 public class WarningManager extends JavaPlugin implements CommandExecutor {
 
-    private static ArrayList<BaseCommand> commands = new ArrayList<>();
+    private static ArrayList<BaseCommand> commands = new ArrayList<BaseCommand>();
 
     @Override
     public void onEnable() {
@@ -101,7 +101,7 @@ public class WarningManager extends JavaPlugin implements CommandExecutor {
     }
 
     private void init() {
-        addCommand(new CommandWarn(), new CommandCheck(), new CommandReset(), new CommandReload(this), new CommandHelp(this));
+        addCommand(new CommandWarn(), new CommandCheck(), new CommandReset(), new CommandRemove(), new CommandReload(this), new CommandHelp(this));
     }
 
     public ArrayList<BaseCommand> getCommands() {
