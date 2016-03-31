@@ -1,0 +1,32 @@
+name: WarningManager
+version: 1.3
+description: Be in control of your players! Set warnings to easily view players' past behavior.
+author: Synapz_
+main: io.github.synapz1.warningmanager.WarningManager
+database: false
+
+commands:
+   whelp:
+      description: Display WarningsManager command menu.
+   warn:
+      description: Warn a player.
+   check:
+      description: Check a player's past warnings.
+   reset:
+      description: Reset a player's warnings.
+   wreload:
+      description: Reload plugin configuration files.
+   remove:
+      description: Removes a warning from a player.
+
+permissions:
+   warnings.*:
+     description: Gives access to all AdminEssentials commands
+     children:
+       warnings.warn: true
+       warnings.check: true
+       warnings.reset: true
+       warnings.help: true
+       warnings.notify: true
+       warnings.reload: true
+       warnings.remove: true

@@ -1,0 +1,30 @@
+# Tips for editing YAML files:
+#   - Do not use TABS! Instead use 4 spaces.
+#   - Lines starting with '#' symbol are completely ignored
+#   - Indentation matters
+#   - If you have any errors, google 'yaml parser' to easily correct them
+# Developer: Synapz_
+
+# Set the prefix of the plugin. This gets displayed on all messages sent through the plugin.
+prefix: '&8[&6WarningManager&8] '
+
+# Message that gets sent out when a player gets warned. Tags: %TARGET% %REASON% %SENDER%
+broadcast-message: '&6Player &c%SENDER% &6has warned &c%PLAYER% &6for &c%REASON%'
+
+# If set to true the broadcast-message will get sent to everyone on the server.
+# If set to false the broadcast-message will only get sent to players with warnings.notify permission
+broadcast-reason: true
+
+# Reason that will be supplied when the reason argument is not full filled
+default-reason: 'Follow all the rules!'
+
+# Message that gets sent to the player when they get warned. Type 'none' to ignore. Tags: %SENDER% %REASON% %WARNINGS%
+player-message: '&6You now have &7%WARNINGS% &6warnings.'
+
+# Auto command handler. Number is amount of warnings until the 'command' happens.
+# In this case, when the player is warned 5 times he will be auto kicked.
+# Avaible tags are %PLAYER% and %SENDER%.
+# Do not include the '/' at the begining of the command
+punishments:
+  5:
+    command: "kick %PLAYER% Stop breaking rules please. - %SENDER%"
