@@ -23,8 +23,15 @@ player-message: '&6You now have &7%WARNINGS% &6warnings.'
 
 # Auto command handler. Number is amount of warnings until the 'command' happens.
 # In this case, when the player is warned 5 times he will be auto kicked.
-# Avaible tags are %PLAYER% and %SENDER%.
+# Avaible tags are %PLAYER% %SENDER %REASON% %WARNINGS%
 # Do not include the '/' at the begining of the command
 punishments:
   5:
-    command: "kick %PLAYER% Stop breaking rules please. - %SENDER%"
+    command: "kick %PLAYER% %REASON% (%WARNINGS%) - %SENDER%"
+
+# Format for the date when displayed in /check
+# Tags: %WEEKDAY%, %YY%, %MM%, %DD%
+date-format: '%WEEKDAY% %MM%-%DD%-%YY%'
+
+# Weather the time will be displayed and set in military-time (24 hour) or 12 hour (with am/pm) form
+military-time: false

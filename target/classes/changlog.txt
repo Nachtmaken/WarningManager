@@ -1,0 +1,6 @@
+v1.6:
+- Added %REASON% and %WARNINGS% tags to punishments
+- Re-Added time saving feature
+- Removed case sensitivity for names
+- Refined /check menus to look nicer
+- Removed config.yml error message on startup

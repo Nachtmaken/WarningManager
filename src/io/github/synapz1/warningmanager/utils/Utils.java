@@ -53,4 +53,14 @@ public class Utils {
             // player is offline, do nothing
         }
     }
+
+    public static String makeSpaces(int spaces) {
+        String strSpace = "";
+
+        while (spaces > 0) {
+            strSpace += " ";
+            spaces--;
+        }
+        return strSpace;
+    }
 }
