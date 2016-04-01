@@ -58,40 +58,40 @@ public class WarningsAPI {
     public void setWarnings(String p, int amount)
     {
         int newTotalWarnings = getWarningsInt(p) + amount;
-        file.set(p + ".Total-Warnings", newTotalWarnings);
+        file.set(p.toLowerCase() + ".Total-Warnings", newTotalWarnings);
         SettingsManager.getManager().saveFiles();
     }
 
     public int getWarningsInt(String p)
     {
-        return file.getInt(p + ".Total-Warnings");
+        return file.getInt(p.toLowerCase() + ".Total-Warnings");
     }
 
     public void setReason(String p, String reason)
     {
-        file.set(p + ".Warning" + getWarningsInt(p) + ".Reason", reason);
+        file.set(p.toLowerCase() + ".Warning" + getWarningsInt(p) + ".Reason", reason);
         SettingsManager.getManager().saveFiles();
     }
 
     public String getReason(String p, int reasonNumber)
     {
-        return file.getString(p + ".Warning" + reasonNumber + ".Reason");
+        return file.getString(p.toLowerCase() + ".Warning" + reasonNumber + ".Reason");
     }
 
     public void setSender(String p, CommandSender sender)
     {
-        file.set(p + ".Warning" + getWarningsInt(p) + ".Sender", sender.getName());
+        file.set(p.toLowerCase() + ".Warning" + getWarningsInt(p) + ".Sender", sender.getName());
         SettingsManager.getManager().saveFiles();
     }
 
     public String getSender(String p, int reasonNumber)
     {
-        return file.getString(p + ".Warning" + reasonNumber + ".Sender");
+        return file.getString(p.toLowerCase() + ".Warning" + reasonNumber + ".Sender");
     }
 
     public void reset(String p)
     {
-        file.set(p, null);
+        file.set(p.toLowerCase(), null);
         SettingsManager.getManager().saveFiles();
     }
 
@@ -115,7 +115,7 @@ public class WarningsAPI {
 
     public void remove(CommandSender sender, String player, int warning) {
         if (getSender(player, warning) != null) {
-            file.set(player + ".Warning" + warning, null);
+            file.set(player.toLowerCase() + ".Warning" + warning, null);
             sender.sendMessage(GOLD + "You removed warning " + RED + warning + GOLD + " from " + RED + player);
             setWarnings(player, -1);
             SettingsManager.getManager().saveFiles();

@@ -14,6 +14,8 @@ public class CommandReset extends BaseCommand {
 
     public void onCommand(CommandSender sender, String[] args) {
         WarningsAPI api = WarningsAPI.getWarningsAPI();
+        args[0] = args[0];
+
         api.reset(args[0]);
         api.notifyOnReset(sender, args[0]);
 
