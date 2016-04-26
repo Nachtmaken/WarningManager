@@ -1,20 +1,21 @@
 package io.github.synapz1.warningmanager;
 
-import io.github.synapz1.warningmanager.utils.Messenger;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import org.bukkit.Bukkit;
+import io.github.synapz1.warningmanager.storage.WarningsFile;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
+import java.util.*;
 
 public class SettingsManager {
+
     private static SettingsManager instance = new SettingsManager();
     private FileConfiguration warnings;
-    private File wFile;
     private WarningManager wm = null;
-    private static ArrayList<Integer> punishments = new ArrayList();
+    private WarningsFile warningsFile;
+
+    private static Map<String, List<Integer>> punishments = new HashMap<String, List<Integer>>();
     public static String PREFIX;
     public static String DEFAULT_REASON;
     public static String BROADCAST_MESSAGE;
@@ -27,18 +28,8 @@ public class SettingsManager {
     }
 
     public void init(WarningManager wm) {
-        if (!wm.getDataFolder().exists()) {
+        if (!wm.getDataFolder().exists())
             wm.getDataFolder().mkdir();
-        }
-        this.wFile = new File(wm.getDataFolder(), "warnings.yml");
-        if (!this.wFile.exists()) {
-            try {
-                this.wFile.createNewFile();
-            } catch (IOException e) {
-                Messenger.getMessenger().message(Bukkit.getConsoleSender(), new String[]{"Could not save warnings.yml"});
-                e.printStackTrace();
-            }
-        }
 
         boolean loadConfig = true;
 
@@ -50,21 +41,13 @@ public class SettingsManager {
         if (loadConfig)
             wm.saveResource("config.yml", false);
 
-        this.warnings = YamlConfiguration.loadConfiguration(this.wFile);
-
         loadValues(wm.getConfig());
         loadPunishments(wm.getConfig());
         this.wm = wm;
+
+        warningsFile = new WarningsFile(wm);
     }
 
-    public void saveFiles() {
-        try {
-            this.warnings.save(this.wFile);
-        } catch (Exception e) {
-            Messenger.getMessenger().message(Bukkit.getConsoleSender(), new String[]{ChatColor.RED + "Could not save warnings.yml!"});
-            e.printStackTrace();
-        }
-    }
 
     public String getDateFormat() {
         String finalOutput = this.wm.getConfig().getString("date-format");
@@ -79,12 +62,12 @@ public class SettingsManager {
         return this.warnings;
     }
 
-    public ArrayList<Integer> getPunishments() {
-        return punishments;
+    public List<Integer> getPunishments(String type) {
+        return punishments.get(type);
     }
 
-    public String getPunishmentCommand(int punishmentNumber) {
-        return this.wm.getConfig().getString("punishments." + punishmentNumber + ".command");
+    public String getPunishmentCommand(String type, int punishmentNumber) {
+        return this.wm.getConfig().getString("punishments." + type + "." + punishmentNumber + ".command");
     }
 
     public void loadValues(FileConfiguration file) {
@@ -96,15 +79,37 @@ public class SettingsManager {
         PLAYER_MESSAGE = transColors(file.getString("player-message"));
     }
 
+    public WarningsFile getWarningsFile() {
+        return warningsFile;
+    }
+
     private String transColors(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
+    public static Map<String, List<Integer>> getPunishments() {
+        return punishments;
+    }
+
     private void loadPunishments(FileConfiguration file) {
-        for (int i = 1; i <= 100; i++) {
-            if (file.getString("punishments." + i + ".command") != null) {
-                punishments.add(Integer.valueOf(i));
+        ConfigurationSection section = file.getConfigurationSection("punishments");
+
+        if (section == null)
+            return;
+
+        Set<String> typeList = section.getValues(false).keySet();
+
+        for (String type : typeList) {
+            type = type.toLowerCase();
+            List<Integer> typeInts = new ArrayList<Integer>();
+
+            for (int i = 1; i <= 100; i++) {
+                if (file.getString("punishments." + type + "." + i + ".command") != null) {
+                    typeInts.add(i);
+                }
             }
+
+            punishments.put(type, typeInts);
         }
     }
 }

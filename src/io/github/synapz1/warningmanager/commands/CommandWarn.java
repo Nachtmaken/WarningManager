@@ -1,23 +1,30 @@
 package io.github.synapz1.warningmanager.commands;
 
 import io.github.synapz1.warningmanager.SettingsManager;
-import io.github.synapz1.warningmanager.base.BaseCommand;
+import io.github.synapz1.warningmanager.utils.Messenger;
 import io.github.synapz1.warningmanager.utils.Utils;
 import io.github.synapz1.warningmanager.utils.WarningsAPI;
-import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 
-public class CommandWarn extends BaseCommand {
+public class CommandWarn extends TypeCommand {
 
-    public void onCommand(CommandSender sender, String[] args) {
+    public void onCommand() {
         String reason = SettingsManager.DEFAULT_REASON;
-        String target = args[0];
 
-        if (args.length >= 2) {
+        if (args.length < 2) {
+            Messenger.getMessenger().message(sender, ChatColor.RED + "Please specify a player.");
+            return;
+        }
+
+        String target = args[1];
+
+        if (args.length > 2) {
             reason = Utils.produceReason(args);
         }
-        WarningsAPI.getWarningsAPI().addWarning(sender, target, reason);
+
+        WarningsAPI.getWarningsAPI().addWarning(sender, target, reason, type.toLowerCase());
     }
 
     public String getName() {
@@ -33,7 +40,7 @@ public class CommandWarn extends BaseCommand {
     }
 
     public String getArguments() {
-        return "<player> [reason]";
+        return TYPE_LIST + " <player> [reason]";
     }
 
     public String getDescription() {

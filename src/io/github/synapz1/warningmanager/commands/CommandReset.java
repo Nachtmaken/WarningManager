@@ -1,14 +1,15 @@
 package io.github.synapz1.warningmanager.commands;
 
 
-import static org.bukkit.ChatColor.*;
-
 import io.github.synapz1.warningmanager.base.BaseCommand;
 import io.github.synapz1.warningmanager.utils.Utils;
 import io.github.synapz1.warningmanager.utils.WarningsAPI;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+
+import static org.bukkit.ChatColor.GOLD;
+import static org.bukkit.ChatColor.RED;
 
 public class CommandReset extends BaseCommand {
 

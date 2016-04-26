@@ -34,7 +34,7 @@ public class Utils {
     public static String produceReason(String[] args)
     {
         String reason = "";
-        for(int i = 1; i < args.length; i++){
+        for(int i = 2; i < args.length; i++){
 
             // this also removes the " " on the last argument so it isn't "{WARNING} "
             reason = i+1 == args.length ? reason + args[i] : reason + args[i] + " ";

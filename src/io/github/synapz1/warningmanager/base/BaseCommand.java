@@ -1,10 +1,10 @@
 package io.github.synapz1.warningmanager.base;
 
-import static org.bukkit.ChatColor.*;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+
+import static org.bukkit.ChatColor.*;
 
 public abstract class BaseCommand {
 

@@ -4,9 +4,10 @@ import io.github.synapz1.warningmanager.WarningManager;
 import io.github.synapz1.warningmanager.base.BaseCommand;
 import io.github.synapz1.warningmanager.utils.Utils;
 import org.bukkit.command.CommandSender;
-import static org.bukkit.ChatColor.*;
 
 import java.util.ArrayList;
+
+import static org.bukkit.ChatColor.*;
 
 public class CommandHelp extends BaseCommand {
 

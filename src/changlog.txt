@@ -1,3 +1,8 @@
+v1.7
+- Major internal changes to file loading, saving, and getting values
+- Renamed remove to delete so it does not interfere with WorldEdit
+- New feature! Groups - A new really cool feature which lets you specify the type of warning and then have dynamic punishments based on that type. Check it out in config.yml!
+
 v1.6:
 - Added %REASON% and %WARNINGS% tags to punishments
 - Re-Added time saving feature

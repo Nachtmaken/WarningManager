@@ -1,5 +1,5 @@
 name: WarningManager
-version: 1.6
+version: 1.8
 description: Be in control of your players! Set warnings to easily view players' past behavior.
 author: Synapz_
 main: io.github.synapz1.warningmanager.WarningManager
@@ -16,8 +16,8 @@ commands:
       description: Reset a player's warnings.
    wreload:
       description: Reload plugin configuration files.
-   remove:
-      description: Removes a warning from a player.
+   delete:
+      description: Deletes a warning from a player.
 
 permissions:
    warnings.*:
@@ -29,4 +29,4 @@ permissions:
        warnings.help: true
        warnings.notify: true
        warnings.reload: true
-       warnings.remove: true
+       warnings.delete: true
