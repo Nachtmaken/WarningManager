@@ -21,7 +21,7 @@ commands:
 
 permissions:
    warnings.*:
-     description: Gives access to all AdminEssentials commands
+     description: Gives access to all WarningManager commands
      children:
        warnings.warn: true
        warnings.check: true
