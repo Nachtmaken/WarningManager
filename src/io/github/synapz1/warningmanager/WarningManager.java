@@ -21,12 +21,6 @@ import static org.bukkit.ChatColor.RED;
 public class WarningManager extends JavaPlugin implements CommandExecutor {
 
     private static ArrayList<BaseCommand> commands = new ArrayList<BaseCommand>();
-    private static WarningManager instance;
-
-    @Override
-    public void onLoad() {
-        instance = this;
-    }
 
     @Override
     public void onEnable() {
@@ -117,10 +111,6 @@ public class WarningManager extends JavaPlugin implements CommandExecutor {
 
     public ArrayList<BaseCommand> getCommands() {
         return commands;
-    }
-
-    public static WarningManager getInstance() {
-        return instance;
     }
 }
 
