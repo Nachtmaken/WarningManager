@@ -2,6 +2,7 @@ package io.github.synapz1.warningmanager;
 
 import io.github.synapz1.warningmanager.base.BaseCommand;
 import io.github.synapz1.warningmanager.commands.*;
+import io.github.synapz1.warningmanager.listeners.PlayerListener;
 import io.github.synapz1.warningmanager.utils.Messenger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,11 +21,19 @@ import static org.bukkit.ChatColor.RED;
 public class WarningManager extends JavaPlugin implements CommandExecutor {
 
     private static ArrayList<BaseCommand> commands = new ArrayList<BaseCommand>();
+    private static WarningManager instance;
+
+    @Override
+    public void onLoad() {
+        instance = this;
+    }
 
     @Override
     public void onEnable() {
         SettingsManager.getManager().init(this);
         init();
+
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         try {
             Metrics metrics = new Metrics(this);
@@ -108,6 +117,10 @@ public class WarningManager extends JavaPlugin implements CommandExecutor {
 
     public ArrayList<BaseCommand> getCommands() {
         return commands;
+    }
+
+    public static WarningManager getInstance() {
+        return instance;
     }
 }
 
