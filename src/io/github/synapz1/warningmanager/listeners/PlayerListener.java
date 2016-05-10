@@ -19,14 +19,11 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         FileConfiguration config = SettingsManager.getManager().getOfflineWarningsFile().getFileConfig();
-        if (config.contains("Players." + player.getName() + ".Messages")) {
-            List<String> messages = config.getStringList("Players." + player.getName() + ".Messages");
-            String[] messagesToSend = new String[messages.size()];
-            for (int i = 0; i < messagesToSend.length; i++) {
-                messagesToSend[i] = ChatColor.translateAlternateColorCodes('&', messages.get(i));
-            }
-            player.sendMessage(messagesToSend);
-            config.set("Players." + player.getName(), null);
+        if (config.contains("Players." + player.getName().toLowerCase() + ".Messages")) {
+            String message = config.getString("Players." + player.getName().toLowerCase() + ".Messages");
+            player.sendMessage(message);
+            config.set("Players." + player.getName().toLowerCase(), null);
+            SettingsManager.getManager().getOfflineWarningsFile().saveFile();
         }
     }
 }

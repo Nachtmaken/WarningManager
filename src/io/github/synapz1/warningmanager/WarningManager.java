@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import static org.bukkit.ChatColor.DARK_RED;
 import static org.bukkit.ChatColor.RED;
 
-;
-
 public class WarningManager extends JavaPlugin implements CommandExecutor {
 
     private static ArrayList<BaseCommand> commands = new ArrayList<BaseCommand>();

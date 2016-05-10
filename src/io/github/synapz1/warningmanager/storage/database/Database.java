@@ -84,6 +84,7 @@ public class Database
     public void updateDatabase(FileConfiguration config) throws SQLException
     {
         openConnection();
+        PreparedStatement statement = connection.prepareStatement("");
     }
 
     public void deleteRow(String playername) throws SQLException

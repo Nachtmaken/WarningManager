@@ -50,16 +50,13 @@ public class Utils {
 
     public static void tryToSendPlayerMessage(String message, String p)
     {
-        try{
             Player player = Bukkit.getServer().getPlayer(p);
+        if (player != null) {
             Messenger.getMessenger().message(player, message);
-        }catch (NullPointerException e)
-        {
-            List<String> messages = new ArrayList<String>();
+        } else {
             FileConfiguration config = SettingsManager.getManager().getOfflineWarningsFile().getFileConfig();
-            if (config.contains("Players." + p + ".Messages")) messages.addAll(config.getStringList("Players." + p + ".Messages"));
-            messages.add(message);
-            config.set("Players." + p + ".Messages", messages);
+            config.set("Players." + p + ".Messages", message);
+            SettingsManager.getManager().getOfflineWarningsFile().saveFile();
         }
     }
 
