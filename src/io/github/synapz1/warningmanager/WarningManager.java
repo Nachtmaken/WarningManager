@@ -2,6 +2,7 @@ package io.github.synapz1.warningmanager;
 
 import io.github.synapz1.warningmanager.base.BaseCommand;
 import io.github.synapz1.warningmanager.commands.*;
+import io.github.synapz1.warningmanager.listeners.PlayerListener;
 import io.github.synapz1.warningmanager.utils.Messenger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,8 +16,6 @@ import java.util.ArrayList;
 import static org.bukkit.ChatColor.DARK_RED;
 import static org.bukkit.ChatColor.RED;
 
-;
-
 public class WarningManager extends JavaPlugin implements CommandExecutor {
 
     private static ArrayList<BaseCommand> commands = new ArrayList<BaseCommand>();
@@ -25,6 +24,8 @@ public class WarningManager extends JavaPlugin implements CommandExecutor {
     public void onEnable() {
         SettingsManager.getManager().init(this);
         init();
+
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         try {
             Metrics metrics = new Metrics(this);

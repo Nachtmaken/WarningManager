@@ -1,5 +1,6 @@
 package io.github.synapz1.warningmanager;
 
+import io.github.synapz1.warningmanager.storage.OfflineWarningsFile;
 import io.github.synapz1.warningmanager.storage.WarningsFile;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,9 +12,9 @@ import java.util.*;
 public class SettingsManager {
 
     private static SettingsManager instance = new SettingsManager();
-    private FileConfiguration warnings;
     private WarningManager wm = null;
     private WarningsFile warningsFile;
+    private OfflineWarningsFile offlineWarningsFile;
 
     private static Map<String, List<Integer>> punishments = new HashMap<String, List<Integer>>();
     public static String PREFIX;
@@ -46,6 +47,7 @@ public class SettingsManager {
         this.wm = wm;
 
         warningsFile = new WarningsFile(wm);
+        offlineWarningsFile = new OfflineWarningsFile(wm);
     }
 
 
@@ -56,10 +58,6 @@ public class SettingsManager {
         finalOutput = finalOutput.replace("%DD%", "dd");
         finalOutput = finalOutput.replace("%YY%", "yyyy");
         return finalOutput;
-    }
-
-    public FileConfiguration getWarningFile() {
-        return this.warnings;
     }
 
     public List<Integer> getPunishments(String type) {
@@ -81,6 +79,10 @@ public class SettingsManager {
 
     public WarningsFile getWarningsFile() {
         return warningsFile;
+    }
+
+    public OfflineWarningsFile getOfflineWarningsFile() {
+        return offlineWarningsFile;
     }
 
     private String transColors(String string) {

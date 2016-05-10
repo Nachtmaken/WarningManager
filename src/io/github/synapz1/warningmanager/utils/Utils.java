@@ -1,9 +1,14 @@
 package io.github.synapz1.warningmanager.utils;
 
+import io.github.synapz1.warningmanager.SettingsManager;
+import io.github.synapz1.warningmanager.WarningManager;
+import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 
@@ -45,12 +50,13 @@ public class Utils {
 
     public static void tryToSendPlayerMessage(String message, String p)
     {
-        try{
             Player player = Bukkit.getServer().getPlayer(p);
+        if (player != null) {
             Messenger.getMessenger().message(player, message);
-        }catch (NullPointerException e)
-        {
-            // player is offline, do nothing
+        } else {
+            FileConfiguration config = SettingsManager.getManager().getOfflineWarningsFile().getFileConfig();
+            config.set("Players." + p + ".Messages", message);
+            SettingsManager.getManager().getOfflineWarningsFile().saveFile();
         }
     }
 
