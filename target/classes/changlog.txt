@@ -1,3 +1,10 @@
+v1.9
+- Plugin now caches offline player warning messages to send them when the player logs in
+- Fixed punishments not reloading on /wreload
+
+v1.8
+- Bug fixes
+
 v1.7
 - Major internal changes to file loading, saving, and getting values
 - Renamed remove to delete so it does not interfere with WorldEdit

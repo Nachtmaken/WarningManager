@@ -2,13 +2,10 @@ package io.github.synapz1.warningmanager.storage;
 
 import org.bukkit.plugin.Plugin;
 
-/**
- * Created by Jeremy Lugo(Refrigerbater) on 5/9/2016.
- */
 public class OfflineWarningsFile extends WarningManagerFile {
 
     public OfflineWarningsFile(Plugin wm) {
-        super(wm, "offlinewarnings.yml");
+        super(wm, "cache.yml");
     }
 
     /*

@@ -19,6 +19,7 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         FileConfiguration config = SettingsManager.getManager().getOfflineWarningsFile().getFileConfig();
+
         if (config.contains("Players." + player.getName().toLowerCase() + ".Messages")) {
             String message = config.getString("Players." + player.getName().toLowerCase() + ".Messages");
             player.sendMessage(message);

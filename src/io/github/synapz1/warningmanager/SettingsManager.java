@@ -43,7 +43,6 @@ public class SettingsManager {
             wm.saveResource("config.yml", false);
 
         loadValues(wm.getConfig());
-        loadPunishments(wm.getConfig());
         this.wm = wm;
 
         warningsFile = new WarningsFile(wm);
@@ -75,6 +74,7 @@ public class SettingsManager {
         PREFIX = transColors(file.getString("prefix"));
         DEFAULT_REASON = transColors(file.getString("default-reason"));
         PLAYER_MESSAGE = transColors(file.getString("player-message"));
+        loadPunishments(file);
     }
 
     public WarningsFile getWarningsFile() {
