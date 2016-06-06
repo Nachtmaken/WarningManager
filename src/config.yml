@@ -5,6 +5,16 @@
 #   - If you have any errors, google 'yaml parser' to easily correct them
 # Developer: Synapz_
 
+# MySQL settings to sync warnings in a database.
+mysql:
+  enabled: false
+  host: host
+  database: database
+  port: 3306
+  username: username
+  password: password
+  table: warnings
+
 # Set the prefix of the plugin. This gets displayed on all messages sent through the plugin.
 prefix: '&8[&6WarningManager&8] '
 

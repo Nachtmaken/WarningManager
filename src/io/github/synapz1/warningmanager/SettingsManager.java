@@ -2,6 +2,7 @@ package io.github.synapz1.warningmanager;
 
 import io.github.synapz1.warningmanager.storage.OfflineWarningsFile;
 import io.github.synapz1.warningmanager.storage.WarningsFile;
+import io.github.synapz1.warningmanager.storage.database.DatabaseManager;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,6 +25,14 @@ public class SettingsManager {
     public static boolean broadcast;
     public static boolean militaryTime;
 
+    public static boolean MYSQL_ENABLED;
+    public static String HOST;
+    public static String DATABASE;
+    public static String WARNINGS_TABLE;
+    public static String USERNAME;
+    public static String PASSWORD;
+    public static int PORT;
+
     public static SettingsManager getManager() {
         return instance;
     }
@@ -44,6 +53,8 @@ public class SettingsManager {
 
         loadValues(wm.getConfig());
         this.wm = wm;
+
+        DatabaseManager.getManager().init();
 
         warningsFile = new WarningsFile(wm);
         offlineWarningsFile = new OfflineWarningsFile(wm);
@@ -74,6 +85,15 @@ public class SettingsManager {
         PREFIX = transColors(file.getString("prefix"));
         DEFAULT_REASON = transColors(file.getString("default-reason"));
         PLAYER_MESSAGE = transColors(file.getString("player-message"));
+
+        MYSQL_ENABLED = file.getBoolean("mysql.enabled");
+        HOST = file.getString("mysql.host");
+        DATABASE = file.getString("mysql.database");
+        WARNINGS_TABLE = file.getString("mysql.table");
+        USERNAME = file.getString("mysql.username");
+        PASSWORD = file.getString("mysql.password");
+        PORT = file.getInt("mysql.port");
+
         loadPunishments(file);
     }
 

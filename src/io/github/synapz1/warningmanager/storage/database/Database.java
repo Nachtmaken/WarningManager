@@ -1,5 +1,6 @@
 package io.github.synapz1.warningmanager.storage.database;
 
+import io.github.synapz1.warningmanager.SettingsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,16 +24,16 @@ public class Database
     protected int port;
     protected String username;
     protected String password;
-    protected String statsTable;
+    protected String warningsTable;
 
-    public Database(String host, String database, int port, String username, String password, String statsTable)
+    public Database(String host, String database, int port, String username, String password, String warningsTable)
     {
         this.host = host;
         this.database = database;
         this.port = port;
         this.username = username;
         this.password = password;
-        this.statsTable = statsTable;
+        this.warningsTable = warningsTable;
     }
 
     public void openConnection() throws SQLException
@@ -70,14 +71,14 @@ public class Database
     public void createTable() throws SQLException
     {
         openConnection();
-        PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + statsTable
-                    + " id int NOT NULL AUTO_INCREMENT"
+        PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + warningsTable
+                    + " (id int NOT NULL AUTO_INCREMENT"
                     + ",username VARCHAR(16) NOT NULL"
                     + ",type VARCHAR(16) NOT NULL"
                     + ",reason VARCHAR(255) NOT NULL"
                     + ",sender VARCHAR(16) NOT NULL"
-                    + ",date DATETIME NOT NULL"
-                    + ",PRIMARY KEY (id);");
+                    + ",date VARCHAR(255) NOT NULL"
+                    + ",PRIMARY KEY (id));");
         statement.executeUpdate();
     }
 
@@ -86,36 +87,32 @@ public class Database
         if (!doesTableExist())
             return;
         openConnection();
-        PreparedStatement statement = connection.prepareStatement("DROP TABLE " + statsTable + ";");
+        PreparedStatement statement = connection.prepareStatement("DROP TABLE " + warningsTable + ";");
         statement.executeUpdate();
     }
 
-    // TODO Go through config and add leaderboards from username.
     public void updateDatabase(FileConfiguration config) throws SQLException
     {
         openConnection();
         // Clear the warnings so that nothing gets added that is already in the database.
-        PreparedStatement clear = connection.prepareStatement("TRUNCATE TABLE " + statsTable);
+        PreparedStatement clear = connection.prepareStatement("TRUNCATE TABLE " + warningsTable);
         clear.executeUpdate();
         for (String username : config.getKeys(false))
         {
-            ConfigurationSection section = config.getConfigurationSection(username + ".Warning");
-            for (String type : section.getKeys(false))
+            ConfigurationSection section = config.getConfigurationSection(username);
+            for (String id : section.getKeys(false))
             {
-                try
-                {
-                    SimpleDateFormat format = new SimpleDateFormat("MM-dd-YYYY HH:mm:ss");
-                    java.util.Date date = format.parse(section.getString(type + ".Date"));
-                    PreparedStatement statement = connection.prepareStatement("INSERT INTO " + statsTable
-                                + " '" + username + "'"
-                                + ",'" + type + "'"
-                                + ",'" + section.getString(type + ".Reason")
-                                + ",'" + section.getString(type + ".Sender")
-                                + "'" + date + ";");
-                } catch(ParseException e)
-                {
-                    e.printStackTrace();
-                }
+                if (id.equals("Total-Warnings")) continue;
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO " + warningsTable
+                            + "(username,type,reason,sender,date)"
+                            + " VALUES("
+                            + "'" + username
+                            + "','" + section.getString(id + ".Type")
+                            + "','" + section.getString(id + ".Reason")
+                            + "','" + section.getString(id + ".Sender")
+                            + "','" + section.getString(id + ".Date")
+                            + "');");
+                statement.executeUpdate();
             }
         }
     }
@@ -125,7 +122,7 @@ public class Database
         openConnection();
         FileConfiguration config = new YamlConfiguration();
         Set<String> players = new HashSet<String>();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + statsTable);
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + warningsTable);
         ResultSet set = statement.executeQuery();
         while (set.next())
         {
@@ -145,7 +142,8 @@ public class Database
                 String type = set.getString("type");
                 String reason = set.getString("reason");
                 String sender = set.getString("sender");
-                Date date = set.getDate("date");
+                String date = set.getString("date");
+
                 config.set(username + "." + c + ".Type", type);
                 config.set(username + "." + c + ".Sender", sender);
                 config.set(username + "." + c + ".Date", date);
@@ -159,7 +157,7 @@ public class Database
     public boolean doesTableExist() throws SQLException
     {
         openConnection();
-        PreparedStatement statement = connection.prepareStatement("SHOW TABLES LIKE " + statsTable + ";");
+        PreparedStatement statement = connection.prepareStatement("SHOW TABLES LIKE " + warningsTable + ";");
         return statement.executeQuery().next();
     }
 }

@@ -44,4 +44,8 @@ public class WarningManagerFile extends File {
     public FileConfiguration getFileConfig() {
         return this.file;
     }
+
+    public void setFileConfiguration(FileConfiguration file) {
+        this.file = file;
+    }
 }
