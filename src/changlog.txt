@@ -1,3 +1,7 @@
+v2.0
+- Added SQL! Now finally sync your warnings in between multiple servers.
+- Thanks @Re for the help implementing this
+
 v1.9
 - Plugin now caches offline player warning messages to send them when the player logs in
 - Fixed punishments not reloading on /wreload

@@ -1,5 +1,5 @@
 name: WarningManager
-version: 1.9
+version: 2.0
 description: Be in control of your players! Set warnings to easily view players' past behavior.
 author: Synapz_
 main: io.github.synapz1.warningmanager.WarningManager

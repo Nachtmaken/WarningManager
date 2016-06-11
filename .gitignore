@@ -1,0 +1,11 @@
+# IntelliJ IDEA Stuff
+/.idea
+WarningManager.iml
+*.iml
+*.eml
+
+# Maven Stuff
+/target
+
+# Github stuff
+/.git
