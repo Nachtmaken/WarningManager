@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="WarningManager:jar">
-    <output-path>$USER_HOME$/Server/plugins</output-path>
-    <root id="archive" name="WarningManager.jar">
-      <element id="module-output" name="WarningManager" />
-    </root>
-  </artifact>
-</component>
