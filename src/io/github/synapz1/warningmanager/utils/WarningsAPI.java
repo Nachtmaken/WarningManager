@@ -30,8 +30,8 @@ public class WarningsAPI {
         p = p.toLowerCase();
         type = type.toLowerCase();
 
-        if (reason.isEmpty())
-            reason = SettingsManager.getManager().DEFAULT_REASON;
+        if (reason.length() <= 0)
+            reason = SettingsManager.getManager().DEFAULT_REASON.replace("%punishment%", type);
 
         setWarnings(p, 1);
         setType(p, type);

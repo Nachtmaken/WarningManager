@@ -25,8 +25,8 @@ broadcast-message: '&6Player &c%SENDER% &6has warned &c%PLAYER% &6for &c%REASON%
 # If set to false the broadcast-message will only get sent to players with warnings.notify permission
 broadcast-reason: true
 
-# Reason that will be supplied when the reason argument is not full filled
-default-reason: 'Follow all the rules!'
+# Reason that will be supplied when the reason argument is not full filled, optional tag is %punishment% which gets replaced with the punishment
+default-reason: 'Follow all the rules! (%punishment%)'
 
 # Message that gets sent to the player when they get warned. Type 'none' to ignore. Tags: %SENDER% %REASON% %WARNINGS%
 player-message: '&6You now have &7%WARNINGS% &6warnings.'
