@@ -62,3 +62,7 @@ date-format: '%WEEKDAY% %MM%-%DD%-%YY%'
 
 # Weather the time will be displayed and set in military-time (24 hour) or 12 hour (with am/pm) form
 military-time: false
+
+# warning age, in days, when a warning no longer counts for punishment count
+# for example: put a warning on BOB and 31 days later (warning-age: 30) you warn him again only the second one will count for the punishment count
+warning-age: 30
