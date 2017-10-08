@@ -24,6 +24,7 @@ public class SettingsManager {
     public static String PLAYER_MESSAGE;
     public static boolean broadcast;
     public static boolean militaryTime;
+    public static int warningAge;
 
     public static boolean MYSQL_ENABLED;
     public static String HOST;
@@ -85,6 +86,7 @@ public class SettingsManager {
         PREFIX = transColors(file.getString("prefix"));
         DEFAULT_REASON = transColors(file.getString("default-reason"));
         PLAYER_MESSAGE = transColors(file.getString("player-message"));
+        warningAge = file.getInt("warning-age");
 
         MYSQL_ENABLED = file.getBoolean("mysql.enabled");
         HOST = file.getString("mysql.host");

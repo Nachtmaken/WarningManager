@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,6 +38,7 @@ public class WarningsAPI {
         setType(p, type);
         setReason(p, reason);
         setSender(p, sender);
+        setMilis(p, System.currentTimeMillis());
         logDate(p);
 
         String broadcastMessage = SettingsManager.BROADCAST_MESSAGE.replace("%SENDER%", sender.getName());
@@ -53,8 +55,14 @@ public class WarningsAPI {
 
             Utils.tryToSendPlayerMessage(playerMessage, p);
         }
-        if (SettingsManager.getManager().getPunishments(type).contains(Integer.valueOf(getWarningsInt(p)))) {
+
+        if (SettingsManager.getManager().getPunishments(type).contains(Integer.valueOf(getPunishmentAmount(p)))) {
             String punishment = SettingsManager.getManager().getPunishmentCommand(type, getWarningsInt(p));
+
+            if (punishment == null) {
+                return;
+            }
+
             punishment = punishment.replace("%PLAYER%", p);
             punishment = punishment.replace("%SENDER%", sender.getName());
             punishment = punishment.replace("%REASON%", reason);
@@ -72,6 +80,12 @@ public class WarningsAPI {
             Messenger.getMessenger().message(Bukkit.getConsoleSender(), "Could not add warning for " + p + " to the database.");
             e.printStackTrace();
         }
+    }
+
+    public void setMilis(String p, long milis) {
+        String path = warnings.getPath(getStartPath(p), getWarningsInt(p) + "", "Millis");
+
+        warnings.setValue(path, milis);
     }
 
     public void setWarnings(String p, int amount) {
@@ -94,6 +108,10 @@ public class WarningsAPI {
 
     public String getType(String p, int warningNumber) {
         return (String) warnings.getValue(warnings.getPath(getStartPath(p), "" + warningNumber, "Type"));
+    }
+
+    public long getMillis(String p, int warningNumber) {
+        return warnings.getFileConfig().getLong(warnings.getPath(getStartPath(p), "" + warningNumber, "Millis"));
     }
 
     public void setReason(String p, String reason) {
@@ -138,6 +156,13 @@ public class WarningsAPI {
         return timeFormates;
     }
 
+    public boolean isInRange(String player, int warning) {
+        long millis = System.currentTimeMillis() - getMillis(player, warning);
+        int days = (int) (millis / (1000*60*60*24));
+
+        return days <= SettingsManager.warningAge;
+    }
+
     public void reset(String p) {
         warnings.setValue(p.toLowerCase(), null);
     }
@@ -157,6 +182,18 @@ public class WarningsAPI {
 
         }
         sender.sendMessage(ChatColor.GOLD + "Total Warnings: " + ChatColor.RED + getWarningsInt(p));
+    }
+
+    public int getPunishmentAmount(String p) {
+        int amount = 0;
+        for (int i = 1; i <= 50; i++) {
+
+            if ((getSender(p, i) != null) && (getReason(p, i) != null) && warnings.getValue(getStartPath(p)) != null && isInRange(p, i)) {
+                amount++;
+            }
+
+        }
+        return amount;
     }
 
     public void remove(CommandSender sender, String player, String type, int warning) {
