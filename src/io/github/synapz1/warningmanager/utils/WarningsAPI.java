@@ -19,7 +19,7 @@ import static org.bukkit.ChatColor.*;
 
 public class WarningsAPI {
 
-    WarningsFile warnings = SettingsManager.getManager().getWarningsFile();
+    private WarningsFile warnings = SettingsManager.getManager().getWarningsFile();
 
     private static WarningsAPI instance = new WarningsAPI();
 
@@ -32,7 +32,7 @@ public class WarningsAPI {
         type = type.toLowerCase();
 
         if (reason.length() <= 0)
-            reason = SettingsManager.getManager().DEFAULT_REASON.replace("%punishment%", type);
+            reason = SettingsManager.DEFAULT_REASON.replace("%punishment%", type);
 
         setWarnings(p, 1);
         setType(p, type);

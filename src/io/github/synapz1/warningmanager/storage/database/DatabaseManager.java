@@ -13,7 +13,7 @@ public class DatabaseManager
 
     private Database database;
 
-    public DatabaseManager()
+    private DatabaseManager()
     {
         this.database = new Database(SettingsManager.HOST, SettingsManager.DATABASE, SettingsManager.PORT, SettingsManager.USERNAME, SettingsManager.PASSWORD, SettingsManager.WARNINGS_TABLE);
     }

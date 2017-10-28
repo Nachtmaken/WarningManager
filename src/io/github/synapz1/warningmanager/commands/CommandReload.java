@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class CommandReload extends BaseCommand {
 
-    private WarningManager wm = null;
+    private WarningManager wm;
 
     public CommandReload(WarningManager wm) {
         this.wm = wm;
