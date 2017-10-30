@@ -43,7 +43,7 @@ public abstract class TypeCommand extends BaseCommand {
     public abstract String getDescription();
 
     private boolean isType(String strType) {
-        for (String type : SettingsManager.getManager().getPunishments().keySet()) {
+        for (String type : SettingsManager.getPunishments().keySet()) {
             if (type.equalsIgnoreCase(strType))
                 return true;
         }
@@ -52,14 +52,14 @@ public abstract class TypeCommand extends BaseCommand {
 
     private String getTypeList() {
         // Generates the type list. Turns groups in config.yml into <hack/grief/advertise>
-        String types = "<";
+        StringBuilder types = new StringBuilder("<");
 
-        for (String type : SettingsManager.getManager().getPunishments().keySet())
-            types += type + "/";
+        for (String type : SettingsManager.getPunishments().keySet())
+            types.append(type).append("/");
 
-        types = types.substring(0, types.lastIndexOf("/"));
-        types += ">";
+        types = new StringBuilder(types.substring(0, types.lastIndexOf("/")));
+        types.append(">");
 
-        return types;
+        return types.toString();
     }
 }

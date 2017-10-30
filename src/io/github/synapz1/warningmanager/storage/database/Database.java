@@ -154,7 +154,7 @@ public class Database
         return config;
     }
 
-    public boolean doesTableExist() throws SQLException
+    private boolean doesTableExist() throws SQLException
     {
         openConnection();
         PreparedStatement statement = connection.prepareStatement("SHOW TABLES LIKE " + warningsTable + ";");

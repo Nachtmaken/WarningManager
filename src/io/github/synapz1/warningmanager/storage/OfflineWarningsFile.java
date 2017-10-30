@@ -14,14 +14,14 @@ public class OfflineWarningsFile extends WarningManagerFile {
 
      */
     public String getPath(String... paths) {
-        String path = "";
+        StringBuilder path = new StringBuilder();
 
         for (String part : paths)
-            path += "." + part;
+            path.append(".").append(part);
 
-        path = path.replaceFirst("\\.", "");
+        path = new StringBuilder(path.toString().replaceFirst("\\.", ""));
 
-        return path;
+        return path.toString();
     }
 
     /*
