@@ -62,12 +62,12 @@ public class Utils {
     }
 
     public static String makeSpaces(int spaces) {
-        String strSpace = "";
+        StringBuilder strSpace = new StringBuilder();
 
         while (spaces > 0) {
-            strSpace += " ";
+            strSpace.append(" ");
             spaces--;
         }
-        return strSpace;
+        return strSpace.toString();
     }
 }

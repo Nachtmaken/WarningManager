@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class CommandWarn extends TypeCommand {
 
     public void onCommand() {
-        String reason = SettingsManager.getManager().DEFAULT_REASON.replace("%punishment%", type);
+        String reason = SettingsManager.DEFAULT_REASON.replace("%punishment%", type);
 
         if (args.length < 2) {
             Messenger.getMessenger().message(sender, ChatColor.RED + "Please specify a player.");

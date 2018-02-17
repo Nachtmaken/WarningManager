@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.bukkit.ChatColor.DARK_RED;
 import static org.bukkit.ChatColor.RED;
@@ -99,9 +100,7 @@ public class WarningManager extends JavaPlugin implements CommandExecutor {
     }
 
     private void addCommand(BaseCommand...cmd) {
-        for (BaseCommand command : cmd) {
-            commands.add(command);
-        }
+        commands.addAll(Arrays.asList(cmd));
     }
 
     private void init() {

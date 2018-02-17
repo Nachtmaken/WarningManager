@@ -2,6 +2,7 @@ package io.github.synapz1.warningmanager.storage;
 
 import io.github.synapz1.warningmanager.SettingsManager;
 import io.github.synapz1.warningmanager.storage.database.DatabaseManager;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.sql.SQLException;
@@ -25,14 +26,14 @@ public class WarningsFile extends WarningManagerFile {
 
     // Ways of getting paths
     public String getPath(String... paths) {
-        String path = "";
+        StringBuilder path = new StringBuilder();
 
         for (String part : paths)
-            path += "." + part;
+            path.append(".").append(part);
 
-        path = path.replaceFirst("\\.", "");
+        path = new StringBuilder(path.toString().replaceFirst("\\.", ""));
 
-        return path;
+        return path.toString();
     }
 
     // Abstract getting and setting values
@@ -43,5 +44,10 @@ public class WarningsFile extends WarningManagerFile {
 
     public Object getValue(String path) {
         return file.get(path);
+    }
+
+    @Override
+    public FileConfiguration getFileConfig() {
+        return super.getFileConfig();
     }
 }
