@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Utils {
 
@@ -48,9 +49,9 @@ public class Utils {
         return reason;
     }
 
-    public static void tryToSendPlayerMessage(String message, String p)
+    public static void tryToSendPlayerMessage(String message, UUID p)
     {
-            Player player = Bukkit.getServer().getPlayer(p);
+        Player player = Bukkit.getServer().getPlayer(p);
         if (player != null) {
             Messenger.getMessenger().message(player, message);
         } else {

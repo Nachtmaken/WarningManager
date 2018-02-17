@@ -4,6 +4,7 @@ import io.github.synapz1.warningmanager.SettingsManager;
 import io.github.synapz1.warningmanager.utils.Messenger;
 import io.github.synapz1.warningmanager.utils.Utils;
 import io.github.synapz1.warningmanager.utils.WarningsAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class CommandWarn extends TypeCommand {
             reason = Utils.produceReason(args);
         }
 
-        WarningsAPI.getWarningsAPI().addWarning(sender, target, reason, type.toLowerCase());
+        WarningsAPI.getWarningsAPI().addWarning(sender, Bukkit.getOfflinePlayer(target).getUniqueId(), reason, type.toLowerCase());
     }
 
     public String getName() {

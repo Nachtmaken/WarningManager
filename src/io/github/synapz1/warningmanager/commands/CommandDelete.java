@@ -2,6 +2,7 @@ package io.github.synapz1.warningmanager.commands;
 
 import io.github.synapz1.warningmanager.utils.Utils;
 import io.github.synapz1.warningmanager.utils.WarningsAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class CommandDelete extends TypeCommand {
         int warning;
         try {
             warning = Integer.parseInt(args[2]);
-            WarningsAPI.getWarningsAPI().remove(sender, args[1], type, warning);
+            WarningsAPI.getWarningsAPI().remove(sender, Bukkit.getOfflinePlayer(args[1]).getUniqueId(), type, warning);
         } catch (NumberFormatException e) {
             sender.sendMessage(ChatColor.RED + "Please use a valid number.");
             sender.sendMessage(this.getCorrectUsage());

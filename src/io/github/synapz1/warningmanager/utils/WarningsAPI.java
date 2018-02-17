@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import static org.bukkit.ChatColor.*;
 
@@ -26,8 +27,7 @@ public class WarningsAPI {
         return instance;
     }
 
-    public void addWarning(CommandSender sender, String p, String reason, String type) {
-        p = p.toLowerCase();
+    public void addWarning(CommandSender sender, UUID p, String reason, String type) {
         type = type.toLowerCase();
 
         if (reason.length() <= 0)
@@ -40,7 +40,7 @@ public class WarningsAPI {
         logDate(p);
 
         String broadcastMessage = SettingsManager.BROADCAST_MESSAGE.replace("%SENDER%", sender.getName());
-        broadcastMessage = broadcastMessage.replace("%PLAYER%", p);
+        broadcastMessage = broadcastMessage.replace("%PLAYER%", Bukkit.getOfflinePlayer(p).getName());
         broadcastMessage = broadcastMessage.replace("%REASON%", reason);
 
         Messenger.getMessenger().broadcastMessage(broadcastMessage);
@@ -55,7 +55,7 @@ public class WarningsAPI {
         }
         if (SettingsManager.getManager().getPunishments(type).contains(Integer.valueOf(getWarningsInt(p)))) {
             String punishment = SettingsManager.getManager().getPunishmentCommand(type, getWarningsInt(p));
-            punishment = punishment.replace("%PLAYER%", p);
+            punishment = punishment.replace("%PLAYER%", p.toString());
             punishment = punishment.replace("%SENDER%", sender.getName());
             punishment = punishment.replace("%REASON%", reason);
             punishment = punishment.replace("%WARNINGS%", getWarningsInt(p) + "");
@@ -74,51 +74,51 @@ public class WarningsAPI {
         }
     }
 
-    public void setWarnings(String p, int amount) {
+    public void setWarnings(UUID p, int amount) {
         String path = warnings.getPath(getStartPath(p), "Total-Warnings");
 
         warnings.setValue(path, getWarningsInt(p) + amount);
     }
 
-    public int getWarningsInt(String p) {
+    public int getWarningsInt(UUID p) {
         String path = warnings.getPath(getStartPath(p), "Total-Warnings");
 
         return (Integer) (warnings.getValue(path) == null ? 0 : warnings.getValue(path));
     }
 
-    public void setType(String p, String type) {
+    public void setType(UUID p, String type) {
         String path = warnings.getPath(getStartPath(p), getWarningsInt(p) + "", "Type");
 
         warnings.setValue(path, type);
     }
 
-    public String getType(String p, int warningNumber) {
+    public String getType(UUID p, int warningNumber) {
         return (String) warnings.getValue(warnings.getPath(getStartPath(p), "" + warningNumber, "Type"));
     }
 
-    public void setReason(String p, String reason) {
+    public void setReason(UUID p, String reason) {
         String path = warnings.getPath(getStartPath(p), getWarningsInt(p) + "", "Reason");
 
         warnings.setValue(path, reason);
     }
 
-    public String getReason(String p, int reasonNumber) {
+    public String getReason(UUID p, int reasonNumber) {
         return (String) warnings.getValue(warnings.getPath(getStartPath(p), "" + reasonNumber, "Reason"));
     }
 
-    public void setSender(String p, CommandSender sender) {
+    public void setSender(UUID p, CommandSender sender) {
         warnings.setValue(warnings.getPath(getStartPath(p), getWarningsInt(p) + "", "Sender"), sender.getName());
     }
 
-    public String getSender(String p, int reasonNumber) {
+    public String getSender(UUID p, int reasonNumber) {
         return (String) warnings.getValue(warnings.getPath(getStartPath(p), "" + reasonNumber, "Sender"));
     }
 
-    public void logDate(String p) {
+    public void logDate(UUID p) {
         warnings.setValue(warnings.getPath(getStartPath(p), "" + getWarningsInt(p), "Date"), Calendar.getInstance().getTime());
     }
 
-    public String[] getDate(String player, int warning) {
+    public String[] getDate(UUID player, int warning) {
         String[] timeFormates = new String[2];
         Date toFormat = (Date) warnings.getValue(warnings.getPath(getStartPath(player), warning + "", "Date"));
 
@@ -138,12 +138,12 @@ public class WarningsAPI {
         return timeFormates;
     }
 
-    public void reset(String p) {
-        warnings.setValue(p.toLowerCase(), null);
+    public void reset(UUID p) {
+        warnings.setValue(p.toString(), null);
     }
 
-    public void check(CommandSender sender, String p) {
-        sender.sendMessage(GRAY + "" + STRIKETHROUGH + BOLD + Utils.makeSpaces(15) + DARK_GRAY + BOLD + STRIKETHROUGH + "[-" + RESET + GOLD + " " + BOLD + p + " " + DARK_GRAY + BOLD + STRIKETHROUGH + "-]" + GRAY + BOLD + STRIKETHROUGH + Utils.makeSpaces(15));
+    public void check(CommandSender sender, UUID p) {
+        sender.sendMessage(GRAY + "" + STRIKETHROUGH + BOLD + Utils.makeSpaces(15) + DARK_GRAY + BOLD + STRIKETHROUGH + "[-" + RESET + GOLD + " " + BOLD + Bukkit.getOfflinePlayer(p).getName() + " " + DARK_GRAY + BOLD + STRIKETHROUGH + "-]" + GRAY + BOLD + STRIKETHROUGH + Utils.makeSpaces(15));
         for (int i = 1; i <= 50; i++) {
 
             if ((getSender(p, i) != null) && (getReason(p, i) != null) && warnings.getValue(getStartPath(p)) != null) {
@@ -159,7 +159,7 @@ public class WarningsAPI {
         sender.sendMessage(ChatColor.GOLD + "Total Warnings: " + ChatColor.RED + getWarningsInt(p));
     }
 
-    public void remove(CommandSender sender, String player, String type, int warning) {
+    public void remove(CommandSender sender, UUID player, String type, int warning) {
         if (getSender(player, warning) != null) {
             warnings.setValue(warnings.getPath(getStartPath(player), String.valueOf(warning)), null);
 
@@ -187,7 +187,7 @@ public class WarningsAPI {
         return false;
     }
 
-    private String getStartPath(String player) {
-        return warnings.getPath(player.toLowerCase());
+    private String getStartPath(UUID player) {
+        return warnings.getPath(player.toString());
     }
 }
