@@ -73,10 +73,10 @@ public class Database
         openConnection();
         PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + warningsTable
                     + " (id int NOT NULL AUTO_INCREMENT"
-                    + ",username VARCHAR(16) NOT NULL"
+                    + ",username VARCHAR(255) NOT NULL"
                     + ",type VARCHAR(16) NOT NULL"
                     + ",reason VARCHAR(255) NOT NULL"
-                    + ",sender VARCHAR(16) NOT NULL"
+                    + ",sender VARCHAR(255) NOT NULL"
                     + ",date VARCHAR(255) NOT NULL"
                     + ",PRIMARY KEY (id));");
         statement.executeUpdate();
